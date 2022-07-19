@@ -12,5 +12,9 @@ logging:
       camunda:
         bpm:
           client: debug
+camunda:
+  bpm:
+    client:
+      async-response-timeout: 60000
 
 

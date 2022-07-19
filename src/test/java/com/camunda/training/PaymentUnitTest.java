@@ -15,6 +15,18 @@ public class PaymentUnitTest {
 
   @Test
   @Deployment(resources = {"payment-technical.bpmn"})
+  void testBPMNErroroOnChargeCC() {
+    ProcessInstance processInstance = runtimeService().createProcessInstanceByKey("PaymentProcess")
+        .startBeforeActivity("ChargeCreditCardTask").execute();
+    assertThat(processInstance).isWaitingAt("ChargeCreditCardTask");
+    fetchAndLock("chargeCC", "junit-test-worker", 1);
+    externalTaskService().handleBpmnError(externalTask().getId(), "junit-test-worker", "creditCardChargeError");
+   assertThat(processInstance).isWaitingAt("FixCardInformationTask");
+
+  }
+
+  @Test
+  @Deployment(resources = {"payment-technical.bpmn"})
   public void chargeCard_test() {
 
     ProcessInstance pi = runtimeService().startProcessInstanceByKey("PaymentProcess",

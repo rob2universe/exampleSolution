@@ -37,7 +37,8 @@ public class ChargeCCHandler implements ExternalTaskHandler {
     } catch (IllegalArgumentException e) {
       StringWriter sw = new StringWriter();
       e.printStackTrace(new PrintWriter(sw));
-      externalTaskService.handleFailure(externalTask, "credit card expired", sw.toString(), 0, 0);
+//      externalTaskService.handleFailure(externalTask, "credit card expired", sw.toString(), 0, 0);
+      externalTaskService.handleBpmnError(externalTask,"100", "credit card expired");
     }
 
   }
