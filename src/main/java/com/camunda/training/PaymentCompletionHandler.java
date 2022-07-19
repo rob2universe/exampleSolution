@@ -35,15 +35,17 @@ public class PaymentCompletionHandler implements ExternalTaskHandler {
       List<MessageCorrelationResultWithVariableDto> correlationResult = new MessageApi(client)
           .deliverMessage(new CorrelationMessageDto().messageName("paymentMessage")
               .correlationKeys(correlationKey).resultEnabled(true));
+
+
       log.info("correlation result: {}", correlationResult);
+//      if (true) throw new RuntimeException("something went wrong");
 
       externalTaskService.complete(externalTask);
-    } catch (ApiException e) {
+    } catch (Exception e) {
 
       int retries = 0;
       if (externalTask.getRetries() != null) retries = externalTask.getRetries()-1;
       externalTaskService.handleFailure(externalTask, e.getMessage(), e.getMessage(),  retries, 1000);
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
