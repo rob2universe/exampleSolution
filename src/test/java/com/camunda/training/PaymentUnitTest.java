@@ -15,7 +15,7 @@ public class PaymentUnitTest {
 
   @Test
   @Deployment(resources = {"payment-technical.bpmn"})
-  void testBPMNErroroOnChargeCC() {
+  void testBPMNErrorOnChargeCC() {
     ProcessInstance processInstance = runtimeService().createProcessInstanceByKey("PaymentProcess")
         .startBeforeActivity("ChargeCreditCardTask").execute();
     assertThat(processInstance).isWaitingAt("ChargeCreditCardTask");
