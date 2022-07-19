@@ -16,5 +16,6 @@ camunda:
   bpm:
     client:
       async-response-timeout: 60000
+      disable-backoff-strategy: false
 
 

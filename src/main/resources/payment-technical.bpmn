@@ -47,12 +47,12 @@
       <bpmn:outgoing>Flow_1r0wd1f</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_1r0wd1f" sourceRef="Gateway_1wx4t33" targetRef="ChargeCreditCardTask" />
-    <bpmn:sequenceFlow id="Flow_12q3qqk" sourceRef="Event_100hvxm" targetRef="Event_0zqltdo" />
-    <bpmn:endEvent id="Event_1yeh952">
+    <bpmn:sequenceFlow id="Flow_12q3qqk" sourceRef="Event_100hvxm" targetRef="CompensationTriggeredEvent" />
+    <bpmn:endEvent id="PaymentFailedEndEvent" name="Payment failed">
       <bpmn:incoming>Flow_16a731o</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_16a731o" sourceRef="Event_0zqltdo" targetRef="Event_1yeh952" />
-    <bpmn:intermediateThrowEvent id="Event_0zqltdo">
+    <bpmn:sequenceFlow id="Flow_16a731o" sourceRef="CompensationTriggeredEvent" targetRef="PaymentFailedEndEvent" />
+    <bpmn:intermediateThrowEvent id="CompensationTriggeredEvent" name="compensation triggered">
       <bpmn:incoming>Flow_12q3qqk</bpmn:incoming>
       <bpmn:outgoing>Flow_16a731o</bpmn:outgoing>
       <bpmn:compensateEventDefinition id="CompensateEventDefinition_0hjpvk6" />
@@ -60,12 +60,25 @@
     <bpmn:boundaryEvent id="Event_1z0hxro" attachedToRef="DeductExistingCreditTask">
       <bpmn:compensateEventDefinition id="CompensateEventDefinition_1aff1yh" />
     </bpmn:boundaryEvent>
-    <bpmn:serviceTask id="Activity_1k36j0m" name="Restore customer credit" isForCompensation="true" camunda:type="external" camunda:topic="restoreCredit" />
-    <bpmn:association id="Association_0trkqmu" associationDirection="One" sourceRef="Event_1z0hxro" targetRef="Activity_1k36j0m" />
+    <bpmn:serviceTask id="RestoreCustomerCreditTask" name="Restore customer credit" isForCompensation="true" camunda:type="external" camunda:topic="restoreCredit" />
+    <bpmn:association id="Association_0trkqmu" associationDirection="One" sourceRef="Event_1z0hxro" targetRef="RestoreCustomerCreditTask" />
   </bpmn:process>
   <bpmn:error id="Error_19y06rk" name="Error_CCexpired" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PaymentProcess">
+      <bpmndi:BPMNEdge id="Flow_16a731o_di" bpmnElement="Flow_16a731o">
+        <di:waypoint x="788" y="140" />
+        <di:waypoint x="902" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12q3qqk_di" bpmnElement="Flow_12q3qqk">
+        <di:waypoint x="680" y="202" />
+        <di:waypoint x="680" y="140" />
+        <di:waypoint x="752" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1r0wd1f_di" bpmnElement="Flow_1r0wd1f">
+        <di:waypoint x="585" y="260" />
+        <di:waypoint x="629" y="260" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1oqf5au_di" bpmnElement="SequenceFlow_1oqf5au">
         <di:waypoint x="199" y="260" />
         <di:waypoint x="249" y="260" />
@@ -95,21 +108,8 @@
         <di:waypoint x="814" y="390" />
         <di:waypoint x="814" y="285" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="456" y="306" width="17" height="14" />
+          <dc:Bounds x="456" y="306" width="18" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1r0wd1f_di" bpmnElement="Flow_1r0wd1f">
-        <di:waypoint x="585" y="260" />
-        <di:waypoint x="629" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_12q3qqk_di" bpmnElement="Flow_12q3qqk">
-        <di:waypoint x="680" y="202" />
-        <di:waypoint x="680" y="140" />
-        <di:waypoint x="752" y="140" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_16a731o_di" bpmnElement="Flow_16a731o">
-        <di:waypoint x="788" y="140" />
-        <di:waypoint x="902" y="140" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ExclusiveGateway_1qywaou_di" bpmnElement="CreditSufficentGateway" isMarkerVisible="true">
         <dc:Bounds x="419" y="235" width="50" height="50" />
@@ -117,8 +117,14 @@
           <dc:Bounds x="404" y="211" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1jcvcjo_di" bpmnElement="ExclusiveGateway_1jcvcjo" isMarkerVisible="true">
+        <dc:Bounds x="789" y="235" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_04zltio_di" bpmnElement="DeductExistingCreditTask">
         <dc:Bounds x="249" y="220" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0z0fz0m_di" bpmnElement="ChargeCreditCardTask">
+        <dc:Bounds x="629" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0jjpy8p_di" bpmnElement="PaymentRequestedMessageReceivedStartEvent">
         <dc:Bounds x="163" y="242" width="36" height="36" />
@@ -126,41 +132,41 @@
           <dc:Bounds x="137" y="285" width="90" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_1jcvcjo_di" bpmnElement="ExclusiveGateway_1jcvcjo" isMarkerVisible="true">
-        <dc:Bounds x="789" y="235" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0z0fz0m_di" bpmnElement="ChargeCreditCardTask">
-        <dc:Bounds x="629" y="220" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0jsad3x_di" bpmnElement="PaymentCompletedEndEvent">
         <dc:Bounds x="922" y="242" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="917" y="285" width="52" height="27" />
+          <dc:Bounds x="918" y="285" width="51" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1wx4t33_di" bpmnElement="Gateway_1wx4t33" isMarkerVisible="true">
         <dc:Bounds x="535" y="235" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1yeh952_di" bpmnElement="Event_1yeh952">
+      <bpmndi:BPMNShape id="Event_1yeh952_di" bpmnElement="PaymentFailedEndEvent">
         <dc:Bounds x="902" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="884" y="165" width="73" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0lhitq1_di" bpmnElement="Event_0zqltdo">
+      <bpmndi:BPMNShape id="Event_0lhitq1_di" bpmnElement="CompensationTriggeredEvent">
         <dc:Bounds x="752" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="736" y="165" width="69" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1yb6jpq_di" bpmnElement="Activity_1k36j0m">
+      <bpmndi:BPMNShape id="Activity_1yb6jpq_di" bpmnElement="RestoreCustomerCreditTask">
         <dc:Bounds x="370" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1racoft_di" bpmnElement="Event_1z0hxro">
+        <dc:Bounds x="282" y="282" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08gv3b7_di" bpmnElement="Event_100hvxm">
+        <dc:Bounds x="662" y="202" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0trkqmu_di" bpmnElement="Association_0trkqmu">
         <di:waypoint x="300" y="318" />
         <di:waypoint x="300" y="480" />
         <di:waypoint x="370" y="480" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_08gv3b7_di" bpmnElement="Event_100hvxm">
-        <dc:Bounds x="662" y="202" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1racoft_di" bpmnElement="Event_1z0hxro">
-        <dc:Bounds x="282" y="282" width="36" height="36" />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
