@@ -31,7 +31,7 @@
       <bpmn:incoming>Flow_1usalfi</bpmn:incoming>
       <bpmn:outgoing>Flow_1dswocq</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_0ifxp0l" name="Fulfill order" camunda:formKey="" camunda:candidateGroups="warehouse">
+    <bpmn:userTask id="Activity_0ifxp0l" name="Fulfill order" camunda:candidateGroups="warehouse">
       <bpmn:extensionElements />
       <bpmn:incoming>Flow_09n0rz2</bpmn:incoming>
       <bpmn:outgoing>Flow_0vkqwxi</bpmn:outgoing>
