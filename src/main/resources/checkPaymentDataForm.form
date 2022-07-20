@@ -1,0 +1,39 @@
+{
+  "components": [
+    {
+      "label": "order Total",
+      "type": "textfield",
+      "id": "Field_15qzwlg",
+      "key": "orderTotal"
+    },
+    {
+      "label": "customer Id",
+      "type": "textfield",
+      "id": "Field_1adpfvz",
+      "key": "customerId",
+      "disabled": false
+    },
+    {
+      "label": "expiry Date",
+      "type": "textfield",
+      "id": "Field_0rlbcqj",
+      "key": "expiryDate",
+      "description": "this is the expiryDate"
+    },
+    {
+      "label": "Error resolved ?",
+      "type": "checkbox",
+      "id": "Field_1y6dwrn",
+      "key": "errorResolved"
+    }
+  ],
+  "type": "default",
+  "id": "checkPaymentDataForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}
